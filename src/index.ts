@@ -160,7 +160,16 @@ app.use('/api/articles', articlesRouter);
 app.use('/api/videos', videosRouter);
 app.use('/api/affiliate-earnings', affiliateEarningsRouter);
 app.use('/api/analytics', analyticsRouter);
-app.use('/api/workflows', workflowsRouter);
+
+// Workflows routes - con log per debug
+console.log('📋 Loading workflows routes...');
+try {
+  app.use('/api/workflows', workflowsRouter);
+  console.log('✅ Workflows routes loaded successfully');
+} catch (error) {
+  console.error('❌ Error loading workflows routes:', error);
+}
+
 app.use('/api/product-candidates', productCandidatesRouter);
 
 // Error handler (deve essere l'ultimo middleware)

@@ -3,6 +3,8 @@ import { trendController } from '../controllers/trendController';
 
 const router = Router();
 
+console.log('🔧 Initializing workflows router...');
+
 // Trend analysis endpoints
 router.get('/trends', trendController.getAllTrends);
 router.get('/trends/category/:category', trendController.getTrendsByCategory);
@@ -12,7 +14,9 @@ router.post('/trends', trendController.createTrend);
 
 // ClickBank API endpoints
 // Endpoint di test semplice per verificare che le route funzionino
+console.log('🔧 Registering ClickBank routes...');
 router.get('/clickbank', (req: Request, res: Response) => {
+  console.log('✅ ClickBank base endpoint called');
   res.json({ 
     message: 'ClickBank API endpoints are available',
     status: 'ok',
@@ -46,4 +50,5 @@ try {
   });
 }
 
+console.log('✅ Workflows router initialized');
 export default router;
