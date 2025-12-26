@@ -168,6 +168,23 @@ console.log('📋 Loading workflows routes...');
 try {
   app.use('/api/workflows', workflowsRouter);
   console.log('✅ Workflows routes loaded successfully');
+  
+  // Registra route ClickBank direttamente come fallback
+  console.log('📋 Registering ClickBank routes directly...');
+  app.get('/api/workflows/clickbank', (req: Request, res: Response) => {
+    res.json({ 
+      message: 'ClickBank API endpoints are available',
+      status: 'ok',
+      timestamp: new Date().toISOString(),
+      endpoints: {
+        test: '/api/workflows/clickbank/test',
+        endpoints: '/api/workflows/clickbank/endpoints',
+        orders: '/api/workflows/clickbank/orders',
+        stats: '/api/workflows/clickbank/stats'
+      }
+    });
+  });
+  console.log('✅ ClickBank direct route registered');
 } catch (error) {
   console.error('❌ Error loading workflows routes:', error);
 }
