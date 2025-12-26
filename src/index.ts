@@ -24,19 +24,28 @@ app.use(cors());
 app.use(express.json());
 
 // ClickBank routes - registrate PRIMA di tutto per debug
-console.log('🔧 Registering ClickBank routes FIRST...');
+console.log('🔧 Registering ClickBank routes FIRST (before all other routes)...');
 app.get('/api/workflows/clickbank', (req: Request, res: Response) => {
-  console.log('✅ ClickBank base endpoint called');
+  console.log('✅ ClickBank base endpoint called at', new Date().toISOString());
   res.json({ 
     message: 'ClickBank API endpoints are available',
     status: 'ok',
     timestamp: new Date().toISOString(),
+    serverTime: Date.now(),
     endpoints: {
       test: '/api/workflows/clickbank/test',
       endpoints: '/api/workflows/clickbank/endpoints',
       orders: '/api/workflows/clickbank/orders',
       stats: '/api/workflows/clickbank/stats'
     }
+  });
+});
+
+// Endpoint di test ancora più semplice
+app.get('/test-clickbank', (req: Request, res: Response) => {
+  res.json({ 
+    message: 'Test endpoint works!',
+    clickbankRoute: '/api/workflows/clickbank should work too'
   });
 });
 
