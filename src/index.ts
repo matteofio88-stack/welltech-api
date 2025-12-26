@@ -23,6 +23,23 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
+// ClickBank routes - registrate PRIMA di tutto per debug
+console.log('🔧 Registering ClickBank routes FIRST...');
+app.get('/api/workflows/clickbank', (req: Request, res: Response) => {
+  console.log('✅ ClickBank base endpoint called');
+  res.json({ 
+    message: 'ClickBank API endpoints are available',
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    endpoints: {
+      test: '/api/workflows/clickbank/test',
+      endpoints: '/api/workflows/clickbank/endpoints',
+      orders: '/api/workflows/clickbank/orders',
+      stats: '/api/workflows/clickbank/stats'
+    }
+  });
+});
+
 // Routes
 app.get('/', (req: Request, res: Response) => {
   res.json({ 
@@ -172,24 +189,8 @@ try {
   console.error('❌ Error loading workflows routes:', error);
 }
 
-// ClickBank routes - registrate direttamente in index.ts per evitare problemi di caricamento
-console.log('📋 Registering ClickBank routes directly in index.ts...');
-app.get('/api/workflows/clickbank', (req: Request, res: Response) => {
-  console.log('✅ ClickBank base endpoint called');
-  res.json({ 
-    message: 'ClickBank API endpoints are available',
-    status: 'ok',
-    timestamp: new Date().toISOString(),
-    endpoints: {
-      test: '/api/workflows/clickbank/test',
-      endpoints: '/api/workflows/clickbank/endpoints',
-      orders: '/api/workflows/clickbank/orders',
-      stats: '/api/workflows/clickbank/stats'
-    }
-  });
-});
-
-// Carica il controller ClickBank e registra le route
+// Carica il controller ClickBank e registra le route DOPO le altre route
+console.log('📋 Loading ClickBank controller...');
 try {
   const { clickbankController } = require('./controllers/clickbankController');
   console.log('✅ ClickBank controller loaded');
@@ -199,7 +200,7 @@ try {
   app.get('/api/workflows/clickbank/orders', clickbankController.getOrders);
   app.get('/api/workflows/clickbank/stats', clickbankController.getStats);
   
-  console.log('✅ All ClickBank routes registered directly');
+  console.log('✅ All ClickBank routes registered');
 } catch (error) {
   console.error('❌ Error loading ClickBank controller:', error);
   console.error('Error details:', error instanceof Error ? error.stack : error);
