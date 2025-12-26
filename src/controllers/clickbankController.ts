@@ -9,7 +9,7 @@ const getClickBankService = (): ClickBankService | null => {
   }
   return new ClickBankService({
     apiKey,
-    apiSecret: process.env.CLICKBANK_API_SECRET,
+    ...(process.env.CLICKBANK_API_SECRET && { apiSecret: process.env.CLICKBANK_API_SECRET }),
   });
 };
 
@@ -84,12 +84,19 @@ export const clickbankController = {
 
       const { startDate, endDate, status, limit } = req.query;
       
-      const orders = await service.getOrders({
-        startDate: startDate as string,
-        endDate: endDate as string,
-        status: status as string,
-        limit: limit ? parseInt(limit as string) : undefined,
-      });
+      const filters: {
+        startDate?: string;
+        endDate?: string;
+        status?: string;
+        limit?: number;
+      } = {};
+      
+      if (startDate) filters.startDate = startDate as string;
+      if (endDate) filters.endDate = endDate as string;
+      if (status) filters.status = status as string;
+      if (limit) filters.limit = parseInt(limit as string);
+      
+      const orders = await service.getOrders(filters);
 
       res.json({
         success: true,
